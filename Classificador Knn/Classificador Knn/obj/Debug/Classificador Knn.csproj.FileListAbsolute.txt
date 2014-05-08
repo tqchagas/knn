@@ -1,0 +1,1 @@
+C:\Users\Família\Documents\Visual Studio 2012\Projects\Classificador Knn\Classificador Knn\bin\Debug\Classificador Knn.exe.config
