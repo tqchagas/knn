@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Classificador_Knn
 {
-    public class Musica
+    public class Artista
     {
-        public int id;
-        public Artista artista;
+        public string nomeArtista;
     }
 }

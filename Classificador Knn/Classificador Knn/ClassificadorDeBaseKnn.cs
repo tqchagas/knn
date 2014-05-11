@@ -10,12 +10,13 @@ namespace Classificador_Knn
     {
         private List<Musica> musicas;
         private List<Cena> cenas;
+        private List<Artista> artistasExistentes;
         private int[,] matrizConfusao;
 
         public ClassificadorDeBaseKnn(string path)
         {
             lerBase(path);
-            matrizConfusao = new int[6, 6]; // definir em funcao da classe avaliada....
+            matrizConfusao = new int[artistasExistentes.Count(), artistasExistentes.Count()]; // definir em funcao da classe avaliada....
         }
 
         private float calcularDistancia(Cena cena1, Cena cena2) // victor
@@ -29,14 +30,14 @@ namespace Classificador_Knn
             // classifica a base em função de k...
         }
 
-        private object definirClasse(List<CenaDistancia> kElementos) // joao victor
+        private Artista definirClasse(List<CenaDistancia> kElementos) // joao victor
         {
             // classifica uma cena em função dos seus k elementos mais próximos....
             // pegar a classe mais comum..
             return null;
         }
 
-        private void armazenarResultado(object classeObtida, object classeReal) // joao victor
+        private void armazenarResultado(Artista classeObtida, Artista classeReal) // joao victor
         {
             // Comparar as classes recebidas e armazenar na matriz de confusão...
         }

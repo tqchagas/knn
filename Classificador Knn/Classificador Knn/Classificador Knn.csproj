@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Artista.cs" />
     <Compile Include="Cena.cs" />
     <Compile Include="CenaDistancia.cs" />
     <Compile Include="ClassificadorDeBaseKnn.cs" />
