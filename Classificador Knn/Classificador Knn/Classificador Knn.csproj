@@ -45,6 +45,7 @@
     <Compile Include="Cena.cs" />
     <Compile Include="CenaDistancia.cs" />
     <Compile Include="ClassificadorDeBaseKnn.cs" />
+    <Compile Include="KElementosArmazenados.cs" />
     <Compile Include="Musica.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -17,7 +17,7 @@ namespace Classificador_Knn
         public ClassificadorDeBaseKnn(string path)
         {
             this.lerArquivos(path);
-            //matrizConfusao = new int[artistasExistentes.Count(), artistasExistentes.Count()]; // definir em funcao da classe avaliada....
+            matrizConfusao = new int[artistasExistentes.Count(), artistasExistentes.Count()]; // definir em funcao da classe avaliada....
         }
 
         private float calcularDistancia(Cena cena1, Cena cena2) // victor
@@ -29,6 +29,25 @@ namespace Classificador_Knn
         public void classificarBase(int k) // christian
         {
             // classifica a base em função de k...
+
+            for (int i = 0; i < cenas.Count(); i++)
+            {
+                KElementosArmazenados kElementosProximos = new KElementosArmazenados(k);
+
+                for (int j = 0; j < cenas.Count(); j++)
+                {
+                    float distancia = calcularDistancia(cenas[i], cenas[j]);
+                    CenaDistancia cenaDistancia = new CenaDistancia(cenas[j].id, distancia);
+                    kElementosProximos.inserir(cenaDistancia);
+                }
+
+                Artista classificacao = definirClasse(kElementosProximos.retornarKElementos());
+                armazenarResultado(classificacao, musicas.Where(item=>item.id == cenas[i].id).Select(item=>item.artista).SingleOrDefault());
+
+                kElementosProximos.esvaziarEstrutura();
+            }
+
+            imprimirMatrizConfusao();
         }
 
         private Artista definirClasse(List<CenaDistancia> kElementos) // joao victor
@@ -52,7 +71,6 @@ namespace Classificador_Knn
         {
             this.lerMusicas("classes.csv");
             this.lerCenas(path);
-            this.carregarListaComArtistasExistentes();
         }
 
         private void lerCenas(string path)
@@ -72,10 +90,10 @@ namespace Classificador_Knn
                 {
                     Cena cena = new Cena();
                     cena.descritores = new List<float>();
-                    cena.id = int.Parse(linha[0]); 
+                    cena.id = int.Parse(linha[0]);
                     for (int i = 1; i < linha.Length; i++)
                     {
-                        cena.descritores.Add(float.Parse(linha[i])); 
+                        cena.descritores.Add(float.Parse(linha[i]));
                     }
                     this.cenas.Add(cena);
                 }
@@ -91,6 +109,8 @@ namespace Classificador_Knn
             else
             {
                 this.musicas = new List<Musica>();
+                this.artistasExistentes = new List<Artista>();
+
                 var linhas = File.ReadAllLines(@path)
                                 .Select(csv => csv.Split(';'))
                                 .Skip(1)
@@ -103,20 +123,17 @@ namespace Classificador_Knn
                     musica.id = int.Parse(linha[0]);
                     artista.nomeArtista = linha[2];
                     musica.artista = artista;
+                    adicionarArtista(musica.artista);
                     this.musicas.Add(musica);
                 }
             }
 
         }
 
-        private void carregarListaComArtistasExistentes()
+        private void adicionarArtista(Artista artista)
         {
-            this.artistasExistentes = new List<Artista>();
-            foreach (var musica in this.musicas)
-            {
-                if (!this.artistasExistentes.Exists(x => x.nomeArtista == musica.artista.nomeArtista))
-                    this.artistasExistentes.Add(musica.artista);
-            }
+            if (!this.artistasExistentes.Exists(x => x.nomeArtista == artista.nomeArtista))
+                this.artistasExistentes.Add(artista);
         }
     }
 }
