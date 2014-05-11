@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Classificador_Knn
 {
@@ -15,8 +16,8 @@ namespace Classificador_Knn
 
         public ClassificadorDeBaseKnn(string path)
         {
-            lerBase(path);
-            matrizConfusao = new int[artistasExistentes.Count(), artistasExistentes.Count()]; // definir em funcao da classe avaliada....
+            this.lerArquivos(path);
+            //matrizConfusao = new int[artistasExistentes.Count(), artistasExistentes.Count()]; // definir em funcao da classe avaliada....
         }
 
         private float calcularDistancia(Cena cena1, Cena cena2) // victor
@@ -47,9 +48,65 @@ namespace Classificador_Knn
             // imprimir matriz de confusão... em porcentagem.... resultados corretos / total de dados avaliados...
         }
 
-        private void lerBase(string path)// thiago
+        private void lerArquivos(string path)// thiago
         {
-            // ler as 2 bases e preencher as listas da classe....
+            this.lerMusicas("classes.csv");
+            this.lerCenas(path);
+        }
+
+        private void lerCenas(string path)
+        {
+            if (!File.Exists(@path))
+            {
+                Console.WriteLine("Arquivo não encontrado.");
+            }
+            else
+            {
+                var linhas = File.ReadAllLines(@path)
+                    .Select(csv => csv.Split(';'))
+                    .Skip(1)
+                    .ToList();
+                this.cenas = new List<Cena>();
+                foreach (var linha in linhas)
+                {
+                    Cena cena = new Cena();
+                    cena.descritores = new List<float>();
+                    cena.id = int.Parse(linha[0]); 
+                    for (int i = 1; i < linha.Length; i++)
+                    {
+                        cena.descritores.Add(float.Parse(linha[i])); 
+                    }
+                    this.cenas.Add(cena);
+                }
+                Console.ReadKey();
+            }
+        }
+
+        private void lerMusicas(string path)
+        {
+            if (!File.Exists(path))
+            {
+                Console.WriteLine("Arquivo não encontrado");
+            }
+            else
+            {
+                this.musicas = new List<Musica>();
+                var linhas = File.ReadAllLines(@path)
+                                .Select(csv => csv.Split(';'))
+                                .Skip(1)
+                                .ToList();
+
+                foreach (var linha in linhas)
+                {
+                    Musica musica = new Musica();
+                    Artista artista = new Artista();
+                    musica.id = int.Parse(linha[0]);
+                    artista.nomeArtista = linha[2];
+                    musica.artista = artista;
+                    this.musicas.Add(musica);
+                }
+            }
+
         }
     }
 }

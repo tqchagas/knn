@@ -10,6 +10,8 @@ namespace Classificador_Knn
     {
         static void Main(string[] args)
         {
+            ClassificadorDeBaseKnn c = new ClassificadorDeBaseKnn("teste.csv");
+            Console.ReadKey();
         }
     }
 }
