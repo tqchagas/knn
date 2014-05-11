@@ -48,10 +48,11 @@ namespace Classificador_Knn
             // imprimir matriz de confusão... em porcentagem.... resultados corretos / total de dados avaliados...
         }
 
-        private void lerArquivos(string path)// thiago
+        private void lerArquivos(string path) // thiago
         {
             this.lerMusicas("classes.csv");
             this.lerCenas(path);
+            this.carregarListaComArtistasExistentes();
         }
 
         private void lerCenas(string path)
@@ -78,7 +79,6 @@ namespace Classificador_Knn
                     }
                     this.cenas.Add(cena);
                 }
-                Console.ReadKey();
             }
         }
 
@@ -107,6 +107,16 @@ namespace Classificador_Knn
                 }
             }
 
+        }
+
+        private void carregarListaComArtistasExistentes()
+        {
+            this.artistasExistentes = new List<Artista>();
+            foreach (var musica in this.musicas)
+            {
+                if (!this.artistasExistentes.Exists(x => x.nomeArtista == musica.artista.nomeArtista))
+                    this.artistasExistentes.Add(musica.artista);
+            }
         }
     }
 }
