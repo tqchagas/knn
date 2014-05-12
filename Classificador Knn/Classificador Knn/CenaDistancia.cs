@@ -8,9 +8,9 @@ namespace Classificador_Knn
     public class CenaDistancia
     {
         public int id;
-        public float distancia;
+        public double distancia;
 
-        public CenaDistancia(int id, float distancia) 
+        public CenaDistancia(int id, double distancia) 
         {
             this.id = id;
             this.distancia = distancia;

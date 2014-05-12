@@ -20,10 +20,15 @@ namespace Classificador_Knn
             matrizConfusao = new int[artistasExistentes.Count(), artistasExistentes.Count()]; // definir em funcao da classe avaliada....
         }
 
-        private float calcularDistancia(Cena cena1, Cena cena2) // victor
+        private double calcularDistancia(Cena cena1, Cena cena2) // victor
         {
-            // Calcula a distância euclidiana entre 2 cenas...
-            return 0;
+            double acumulador = 0;
+            for (int i = 0; i < cena1.descritores.Count(); i++)
+            {
+                acumulador += Math.Pow( cena1.descritores[i] + cena2.descritores[i], 2);
+                
+            }
+            return (Math.Sqrt(acumulador));
         }
 
         public void classificarBase(int k) // christian
@@ -36,7 +41,7 @@ namespace Classificador_Knn
 
                 for (int j = 0; j < cenas.Count(); j++)
                 {
-                    float distancia = calcularDistancia(cenas[i], cenas[j]);
+                    double distancia = calcularDistancia(cenas[i], cenas[j]);
                     CenaDistancia cenaDistancia = new CenaDistancia(cenas[j].id, distancia);
                     kElementosProximos.inserir(cenaDistancia);
                 }
@@ -132,7 +137,7 @@ namespace Classificador_Knn
 
         private void adicionarArtista(Artista artista)
         {
-            if (!this.artistasExistentes.Exists(x => x.nomeArtista == artista.nomeArtista))
+            if (this.artistasExistentes.Exists(x => x.nomeArtista != artista.nomeArtista))
                 this.artistasExistentes.Add(artista);
         }
     }
