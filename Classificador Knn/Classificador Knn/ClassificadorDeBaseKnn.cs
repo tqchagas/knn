@@ -46,10 +46,10 @@ namespace Classificador_Knn
                     kElementosProximos.inserir(cenaDistancia);
                 }
 
-                Artista classificacao = definirClasse(kElementosProximos.retornarKElementos());
-                armazenarResultado(classificacao, musicas.Where(item=>item.id == cenas[i].id).Select(item=>item.artista).SingleOrDefault());
+                //Artista classificacao = definirClasse(kElementosProximos.retornarKElementos());
+                //armazenarResultado(classificacao, musicas.Where(item=>item.id == cenas[i].id).Select(item=>item.artista).SingleOrDefault());
 
-                kElementosProximos.esvaziarEstrutura();
+                //kElementosProximos.esvaziarEstrutura();
             }
 
             imprimirMatrizConfusao();
