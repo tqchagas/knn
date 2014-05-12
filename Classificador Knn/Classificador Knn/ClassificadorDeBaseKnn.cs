@@ -139,15 +139,12 @@ namespace Classificador_Knn
                 foreach (var linha in linhas)
                 {
                     Musica musica = new Musica();
-                    Artista artista = new Artista();
                     musica.id = int.Parse(linha[0]);
-                    artista.nomeArtista = linha[2];
-                    musica.artista = artista;
+                    musica.artista = new Artista(linha[2]);
                     adicionarArtista(musica.artista);
                     this.musicas.Add(musica);
                 }
             }
-
         }
 
         private void adicionarArtista(Artista artista)

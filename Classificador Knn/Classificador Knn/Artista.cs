@@ -9,5 +9,10 @@ namespace Classificador_Knn
     public class Artista
     {
         public string nomeArtista;
+
+        public Artista(string nomeArtista)
+        {
+            this.nomeArtista = nomeArtista;
+        }
     }
 }
