@@ -22,18 +22,16 @@ namespace Classificador_Knn
 
         private double calcularDistancia(Cena cena1, Cena cena2) // victor
         {
+            int menorQuantidadeDescritores = cena1.descritores.Count() > cena2.descritores.Count ?
+                cena2.descritores.Count() : cena1.descritores.Count();
 
-            if (cena1.descritores.Count() != cena2.descritores.Count()) return 0;
-            else
+            double acumulador = 0;
+            for (int i = 0; i < menorQuantidadeDescritores; i++)
             {
-                double acumulador = 0;
-                for (int i = 0; i < cena1.descritores.Count(); i++)
-                {
-                    acumulador += Math.Pow(cena1.descritores[i] - cena2.descritores[i], 2);
+                acumulador += Math.Pow(cena1.descritores[i] - cena2.descritores[i], 2);
 
-                }
-                return (Math.Sqrt(acumulador));
             }
+            return (Math.Sqrt(acumulador));
         }
 
         public void classificarBase(int k) // christian
@@ -42,7 +40,7 @@ namespace Classificador_Knn
             TimeSpan t = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
             for (int i = 0; i < cenas.Count(); i++)
             {
-                
+
                 KElementosArmazenados kElementosProximos = new KElementosArmazenados(k);
 
                 for (int j = 0; j < cenas.Count(); j++)
@@ -83,7 +81,7 @@ namespace Classificador_Knn
                 Console.WriteLine();
                 for (int j = 0; j < matrizConfusao.Length; j++)
                 {
-                    Console.WriteLine(matrizConfusao[i,j]);
+                    Console.WriteLine(matrizConfusao[i, j]);
                 }
             }
             // imprimir matriz de confusão... em porcentagem.... resultados corretos / total de dados avaliados...
