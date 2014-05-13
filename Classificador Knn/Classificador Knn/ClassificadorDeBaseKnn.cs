@@ -20,27 +20,12 @@ namespace Classificador_Knn
             matrizConfusao = new int[artistasExistentes.Count(), artistasExistentes.Count()]; // definir em funcao da classe avaliada....
         }
 
-        private double calcularDistancia(Cena cena1, Cena cena2) // victor
-        {
-            int menorQuantidadeDescritores = cena1.descritores.Count() > cena2.descritores.Count ?
-                cena2.descritores.Count() : cena1.descritores.Count();
-
-            double acumulador = 0;
-            for (int i = 0; i < menorQuantidadeDescritores; i++)
-            {
-                acumulador += Math.Pow(cena1.descritores[i] - cena2.descritores[i], 2);
-
-            }
-            return (Math.Sqrt(acumulador));
-        }
-
-        public void classificarBase(int k) // christian
+        public void classificarBase(int k)
         {
             // classifica a base em função de k...
             TimeSpan t = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
             for (int i = 0; i < cenas.Count(); i++)
             {
-
                 KElementosArmazenados kElementosProximos = new KElementosArmazenados(k);
 
                 for (int j = 0; j < cenas.Count(); j++)
@@ -55,11 +40,26 @@ namespace Classificador_Knn
 
                 kElementosProximos.esvaziarEstrutura();
             }
+        
             // 10 minutos até aqui
             TimeSpan f = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
             Console.Write(f - t);
 
             imprimirMatrizConfusao();
+        }
+
+        private double calcularDistancia(Cena cena1, Cena cena2) // victor
+        {
+            int menorQuantidadeDescritores = cena1.descritores.Count() > cena2.descritores.Count ?
+                cena2.descritores.Count() : cena1.descritores.Count();
+
+            double acumulador = 0;
+            for (int i = 0; i < menorQuantidadeDescritores; i++)
+            {
+                acumulador += Math.Pow(cena1.descritores[i] - cena2.descritores[i], 2);
+
+            }
+            return (Math.Sqrt(acumulador));
         }
 
         private Artista definirClasse(List<CenaDistancia> kElementos) // joao victor
@@ -71,41 +71,17 @@ namespace Classificador_Knn
             List<string> artistas = new List<string>();
 
             kElementos.ForEach(item => artistas.AddRange(this.musicas.Where(_item => _item.id == item.id).Select(x => x.artista.nome)));
+
             Dictionary<string, int> dic = new Dictionary<string, int>();
             foreach (string a in artistas)
             {
-                if (!dic.ContainsKey(a)) dic.Add(a, artistas.Where(item => item == a).Count());
+                if (!dic.ContainsKey(a)) dic.Add(a, artistas.Where(item => item == a).Count()); // adiciona o nome do artista que ainda não foi contabilizado....
 
             }
 
-            dic.OrderBy(a => a.Value);
+            dic.OrderByDescending(a => a.Value); // classificação mais comum na 1ª posição.
 
-            //return artistasExistentes.Where(item=>item.nome.Equals(dic.ElementAt(0).Key) ) ;
-            return null;
-        }
-
-        private Artista definirArtistaMaisComum(Artista[] artistas)
-        {
-
-            Artista artista = artistas[0]; // em caso de empate.
-            int count = 0;
-            int countMax = 0;
-            for (int i = 0; i < artistas.Count(); i++)
-            {
-                count = 0;
-                for (int j = 0; j < artistas.Count(); j++)
-                {
-                    if (artistas[j] == artistas[i])
-                        count++;
-                }
-                if (count > countMax)
-                {
-                    artista = artistas[i];
-                    countMax = count;
-                }
-            }
-            Console.WriteLine("O artista é: " + artista.nome);
-            return artista;
+            return artistasExistentes.Where(item => item.nome == dic.ElementAt(0).Key).SingleOrDefault();
         }
 
         private void armazenarResultado(Artista classeObtida, Artista classeReal) // joao victor
