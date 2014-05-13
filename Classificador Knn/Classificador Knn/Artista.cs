@@ -8,13 +8,18 @@ namespace Classificador_Knn
 {
     public class Artista
     {
-        public string nomeArtista;
-
-        public Artista() { }
+        public string nome;
 
         public Artista(string nomeArtista)
         {
-            this.nomeArtista = nomeArtista;
+            if (nomeArtista == null)
+            {
+                Console.ReadKey();
+            }
+            else
+            {
+                this.nome = nomeArtista;
+            }
         }
     }
 }

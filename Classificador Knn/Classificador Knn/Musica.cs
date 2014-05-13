@@ -10,5 +10,6 @@ namespace Classificador_Knn
     {
         public int id;
         public Artista artista;
+        
     }
 }

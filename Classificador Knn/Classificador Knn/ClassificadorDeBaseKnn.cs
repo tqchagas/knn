@@ -50,10 +50,10 @@ namespace Classificador_Knn
                     kElementosProximos.inserir(cenaDistancia);
                 }
 
-                //Artista classificacao = definirClasse(kElementosProximos.retornarKElementos());
-                //armazenarResultado(classificacao, musicas.Where(item=>item.id == cenas[i].id).Select(item=>item.artista).SingleOrDefault());
+                Artista classificacao = definirClasse(kElementosProximos.retornarKElementos());
+                armazenarResultado(classificacao, musicas.Where(item => item.id == cenas[i].id).Select(item => item.artista).SingleOrDefault());
 
-                //kElementosProximos.esvaziarEstrutura();
+                kElementosProximos.esvaziarEstrutura();
             }
             // 10 minutos até aqui
             TimeSpan f = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
@@ -66,17 +66,28 @@ namespace Classificador_Knn
         {
             // classifica uma cena em função dos seus k elementos mais próximos....
             // pegar a classe mais comum..
-            String[] a = new String[kElementos.Count()];
-            for (int i = 0; i < kElementos.Count(); i++)
+
+            // Recupera o artista com base no id da cena
+            List<string> artistas = new List<string>();
+
+            kElementos.ForEach(item => artistas.AddRange(this.musicas.Where(_item => _item.id == item.id).Select(x => x.artista.nome)));
+            Dictionary<string, int> dic = new Dictionary<string, int>();
+            foreach (string a in artistas)
             {
-                a[i] = this.musicas.Where(item => item.id == kElementos[i].id).SingleOrDefault().artista.nomeArtista;
+                if (!dic.ContainsKey(a)) dic.Add(a, artistas.Where(item => item == a).Count());
+
             }
-            return getCommon(a);
+
+            dic.OrderBy(a => a.Value);
+
+            //return artistasExistentes.Where(item=>item.nome.Equals(dic.ElementAt(0).Key) ) ;
+            return null;
         }
 
-        private Artista getCommon(String[] artistas)
+        private Artista definirArtistaMaisComum(Artista[] artistas)
         {
-            Artista artista = new Artista();
+
+            Artista artista = artistas[0]; // em caso de empate.
             int count = 0;
             int countMax = 0;
             for (int i = 0; i < artistas.Count(); i++)
@@ -89,34 +100,48 @@ namespace Classificador_Knn
                 }
                 if (count > countMax)
                 {
-                    artista.nomeArtista = artistas[i];
+                    artista = artistas[i];
                     countMax = count;
                 }
             }
-            Console.WriteLine("O artista é: " + artista.nomeArtista);
+            Console.WriteLine("O artista é: " + artista.nome);
             return artista;
-
         }
 
         private void armazenarResultado(Artista classeObtida, Artista classeReal) // joao victor
         {
-            int index1 = artistasExistentes.IndexOf(artistasExistentes.Where(item => item.nomeArtista == classeObtida.nomeArtista).SingleOrDefault());
-            int index2 = artistasExistentes.IndexOf(artistasExistentes.Where(item => item.nomeArtista == classeReal.nomeArtista).SingleOrDefault());
-            matrizConfusao[index1, index2] += 1;
             // Comparar as classes recebidas e armazenar na matriz de confusão...
+            int index1 = artistasExistentes.IndexOf(artistasExistentes.Where(item => item.nome == classeObtida.nome).SingleOrDefault());
+            int index2 = artistasExistentes.IndexOf(artistasExistentes.Where(item => item.nome == classeReal.nome).SingleOrDefault());
+            matrizConfusao[index1, index2] += 1;
         }
 
         public void imprimirMatrizConfusao() // victor
         {
-            for (int i = 0; i < matrizConfusao.Length; i++)
+            // imprimir matriz de confusão... em porcentagem.... resultados corretos / total de dados avaliados...
+            int[,] matrizPorcentagem = this.matrizConfusao;
+            int[] soma = new int[this.matrizConfusao.Length];
+            int max = this.artistasExistentes.Count();
+            Console.WriteLine("max: " + max);
+            for (int i = 0; i < max; i++)
             {
-                Console.WriteLine();
-                for (int j = 0; j < matrizConfusao.Length; j++)
+                for (int j = 0; j < max; j++)
                 {
-                    Console.WriteLine(matrizConfusao[i, j]);
+                    soma[i] += this.matrizConfusao[i, j];
+                }
+                for (int j = 0; j < max; j++)
+                {
+                    matrizPorcentagem[i, j] = ((this.matrizConfusao[i, j] / soma[i]) * 100);
                 }
             }
-            // imprimir matriz de confusão... em porcentagem.... resultados corretos / total de dados avaliados...
+
+            for (int i = 0; i < max; i++)
+            {
+                for (int j = 0; j < max; j++)
+                {
+                    Console.WriteLine(matrizPorcentagem[i, j]);
+                }
+            }
         }
 
         private void lerArquivos(string path) // thiago
@@ -176,12 +201,13 @@ namespace Classificador_Knn
                     adicionarArtista(musica.artista);
                     this.musicas.Add(musica);
                 }
+
             }
         }
 
         private void adicionarArtista(Artista artista)
         {
-            if (!this.artistasExistentes.Exists(x => x.nomeArtista == artista.nomeArtista))
+            if (!this.artistasExistentes.Exists(x => x.nome == artista.nome))
                 this.artistasExistentes.Add(artista);
         }
     }
