@@ -90,6 +90,7 @@ namespace Classificador_Knn
             int index1 = artistasExistentes.IndexOf(artistasExistentes.Where(item => item.nome == classeObtida.nome).SingleOrDefault());
             int index2 = artistasExistentes.IndexOf(artistasExistentes.Where(item => item.nome == classeReal.nome).SingleOrDefault());
             matrizConfusao[index1, index2] += 1;
+            Console.WriteLine(matrizConfusao[index1, index2]);
         }
 
         public void imprimirMatrizConfusao() // victor
@@ -99,25 +100,43 @@ namespace Classificador_Knn
             int[] soma = new int[this.matrizConfusao.Length];
             int max = this.artistasExistentes.Count();
             Console.WriteLine("max: " + max);
-            for (int i = 0; i < max; i++)
+            /*for (int i = 0; i < max; i++)
             {
+                Console.WriteLine(i);
                 for (int j = 0; j < max; j++)
                 {
                     soma[i] += this.matrizConfusao[i, j];
                 }
                 for (int j = 0; j < max; j++)
                 {
-                    matrizPorcentagem[i, j] = ((this.matrizConfusao[i, j] / soma[i]) * 100);
+                    try
+                    {
+                        matrizPorcentagem[i, j] = ((this.matrizConfusao[i, j] / soma[i]) * 100);
+                    }
+                    catch (DivideByZeroException a)
+                    {
+                        matrizPorcentagem[i, j] = 0;
+                    }
                 }
+            }*/
+            
+            var elementos = ";";
+            foreach (var artista in this.artistasExistentes)
+            {
+                elementos += artista.nome + ";";
             }
-
+            elementos += "\n";
             for (int i = 0; i < max; i++)
             {
+                Console.WriteLine(i);
+                elementos += this.artistasExistentes[i].nome + ";";
                 for (int j = 0; j < max; j++)
                 {
-                    Console.WriteLine(matrizPorcentagem[i, j]);
+                    elementos += matrizConfusao[i, j] + ";";
                 }
+                elementos += "\n";
             }
+            File.WriteAllText("novo.csv", elementos);
         }
 
         private void lerArquivos(string path) // thiago

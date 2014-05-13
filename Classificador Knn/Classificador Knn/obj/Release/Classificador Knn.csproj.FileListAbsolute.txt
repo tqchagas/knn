@@ -10,3 +10,9 @@ C:\Users\Administrador\Documents\GitHub\knn\Classificador Knn\Classificador Knn\
 C:\Users\Administrador\Documents\GitHub\knn\Classificador Knn\Classificador Knn\bin\Release\Classificador Knn.exe
 C:\Users\Administrador\Documents\GitHub\knn\Classificador Knn\Classificador Knn\bin\Release\Classificador Knn.pdb
 C:\Users\Administrador\Documents\GitHub\knn\Classificador Knn\Classificador Knn\obj\Release\Classificador Knn.csprojResolveAssemblyReference.cache
+C:\Users\jvitorsf\Documents\GitHub\knn\Classificador Knn\Classificador Knn\bin\Release\Classificador Knn.exe.config
+C:\Users\jvitorsf\Documents\GitHub\knn\Classificador Knn\Classificador Knn\obj\Release\Classificador Knn.exe
+C:\Users\jvitorsf\Documents\GitHub\knn\Classificador Knn\Classificador Knn\obj\Release\Classificador Knn.pdb
+C:\Users\jvitorsf\Documents\GitHub\knn\Classificador Knn\Classificador Knn\bin\Release\Classificador Knn.exe
+C:\Users\jvitorsf\Documents\GitHub\knn\Classificador Knn\Classificador Knn\bin\Release\Classificador Knn.pdb
+C:\Users\jvitorsf\Documents\GitHub\knn\Classificador Knn\Classificador Knn\obj\Release\Classificador Knn.csprojResolveAssemblyReference.cache
