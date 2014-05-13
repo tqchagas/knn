@@ -68,11 +68,43 @@ namespace Classificador_Knn
         {
             // classifica uma cena em função dos seus k elementos mais próximos....
             // pegar a classe mais comum..
-            return null;
+            String[] a = new String[kElementos.Count()];
+            for (int i = 0; i < kElementos.Count(); i++)
+            {
+                a[i] = this.musicas.Where(item => item.id == kElementos[i].id).SingleOrDefault().artista.nomeArtista;
+            }
+            return getCommon(a);
+        }
+
+        private Artista getCommon(String[] artistas)
+        {
+            Artista artista = new Artista();
+            int count = 0;
+            int countMax = 0;
+            for (int i = 0; i < artistas.Count(); i++)
+            {
+                count = 0;
+                for (int j = 0; j < artistas.Count(); j++)
+                {
+                    if (artistas[j] == artistas[i])
+                        count++;
+                }
+                if (count > countMax)
+                {
+                    artista.nomeArtista = artistas[i];
+                    countMax = count;
+                }
+            }
+            Console.WriteLine("O artista é: " + artista.nomeArtista);
+            return artista;
+
         }
 
         private void armazenarResultado(Artista classeObtida, Artista classeReal) // joao victor
         {
+            int index1 = artistasExistentes.IndexOf(artistasExistentes.Where(item => item.nomeArtista == classeObtida.nomeArtista).SingleOrDefault());
+            int index2 = artistasExistentes.IndexOf(artistasExistentes.Where(item => item.nomeArtista == classeReal.nomeArtista).SingleOrDefault());
+            matrizConfusao[index1, index2] += 1;
             // Comparar as classes recebidas e armazenar na matriz de confusão...
         }
 
@@ -154,7 +186,7 @@ namespace Classificador_Knn
 
         private void adicionarArtista(Artista artista)
         {
-            if (this.artistasExistentes.Exists(x => x.nomeArtista != artista.nomeArtista))
+            if (!this.artistasExistentes.Exists(x => x.nomeArtista == artista.nomeArtista))
                 this.artistasExistentes.Add(artista);
         }
     }
