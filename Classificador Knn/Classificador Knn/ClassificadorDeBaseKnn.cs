@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Diagnostics;
 
 namespace Classificador_Knn
 {
@@ -32,18 +33,18 @@ namespace Classificador_Knn
                 {
                     double distancia = calcularDistancia(cenas[i], cenas[j]);
                     CenaDistancia cenaDistancia = new CenaDistancia(cenas[j].id, distancia);
-                    kElementosProximos.inserir(cenaDistancia);
-                }
+                    kElementosProximos.inserir(cenaDistancia); // k^2 ou k
+                } // o^2 * k
 
                 Artista classificacao = definirClasse(kElementosProximos.retornarKElementos());
                 armazenarResultado(classificacao, musicas.Where(item => item.id == cenas[i].id).Select(item => item.artista).SingleOrDefault());
 
                 kElementosProximos.esvaziarEstrutura();
             }
-        
+
             // 10 minutos até aqui
             TimeSpan f = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
-            Console.Write(f - t);
+            //Console.Write(f - t);
 
             imprimirMatrizConfusao();
         }
@@ -90,53 +91,53 @@ namespace Classificador_Knn
             int index1 = artistasExistentes.IndexOf(artistasExistentes.Where(item => item.nome == classeObtida.nome).SingleOrDefault());
             int index2 = artistasExistentes.IndexOf(artistasExistentes.Where(item => item.nome == classeReal.nome).SingleOrDefault());
             matrizConfusao[index1, index2] += 1;
-            Console.WriteLine(matrizConfusao[index1, index2]);
+            //Console.WriteLine(matrizConfusao[index1, index2]);
         }
 
-        public void imprimirMatrizConfusao() // victor
+        public void imprimirMatrizConfusao() // imprimir matriz de confusão... em porcentagem.... resultados corretos / total de dados avaliados...
         {
-            // imprimir matriz de confusão... em porcentagem.... resultados corretos / total de dados avaliados...
-            int[,] matrizPorcentagem = this.matrizConfusao;
-            int[] soma = new int[this.matrizConfusao.Length];
-            int max = this.artistasExistentes.Count();
-            Console.WriteLine("max: " + max);
-            /*for (int i = 0; i < max; i++)
+            int tamanhoMatriz = this.artistasExistentes.Count();
+            int[] somaLinhaMatriz = new int[tamanhoMatriz];
+            int i = 0;
+            int j = 0;
+            for (j = 0; i < tamanhoMatriz; )
             {
-                Console.WriteLine(i);
-                for (int j = 0; j < max; j++)
+                somaLinhaMatriz[i] += this.matrizConfusao[i, j];
+                j++;
+                if (j == tamanhoMatriz)
                 {
-                    soma[i] += this.matrizConfusao[i, j];
-                }
-                for (int j = 0; j < max; j++)
-                {
-                    try
+                    j = 0;
+                    do
                     {
-                        matrizPorcentagem[i, j] = ((this.matrizConfusao[i, j] / soma[i]) * 100);
-                    }
-                    catch (DivideByZeroException a)
-                    {
-                        matrizPorcentagem[i, j] = 0;
-                    }
+                        if (this.matrizConfusao[i,j] != 0)
+                        {
+                            this.matrizConfusao[i, j] = (this.matrizConfusao[i, j] / somaLinhaMatriz[i]) * 100;    
+                        }
+                        else{}
+                        j++;
+                    } while (j < tamanhoMatriz);
+                    i++;
+                    j = 0;                    
                 }
-            }*/
-            
-            var elementos = ";";
+            }
+            var elementos = ";"; //saltar primeira lacuna do excell
             foreach (var artista in this.artistasExistentes)
             {
                 elementos += artista.nome + ";";
             }
             elementos += "\n";
-            for (int i = 0; i < max; i++)
+                       
+            for (i = 0; i < tamanhoMatriz; i++)
             {
                 Console.WriteLine(i);
                 elementos += this.artistasExistentes[i].nome + ";";
-                for (int j = 0; j < max; j++)
+                for (j = 0; j < tamanhoMatriz; j++)
                 {
-                    elementos += matrizConfusao[i, j] + ";";
+                    elementos += this.matrizConfusao[i, j] + ";";
                 }
                 elementos += "\n";
             }
-            File.WriteAllText("novo.csv", elementos);
+            File.WriteAllText("matrizConfusao.csv", elementos);
         }
 
         private void lerArquivos(string path) // thiago
