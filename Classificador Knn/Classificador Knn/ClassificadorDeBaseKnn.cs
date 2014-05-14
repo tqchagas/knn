@@ -41,15 +41,10 @@ namespace Classificador_Knn
 
                 kElementosProximos.esvaziarEstrutura();
             }
-
-            // 10 minutos até aqui
-            TimeSpan f = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
-            //Console.Write(f - t);
-
             imprimirMatrizConfusao();
         }
 
-        private double calcularDistancia(Cena cena1, Cena cena2) // victor
+        private double calcularDistancia(Cena cena1, Cena cena2)
         {
             int menorQuantidadeDescritores = cena1.descritores.Count() > cena2.descritores.Count ?
                 cena2.descritores.Count() : cena1.descritores.Count();
@@ -63,7 +58,7 @@ namespace Classificador_Knn
             return (Math.Sqrt(acumulador));
         }
 
-        private Artista definirClasse(List<CenaDistancia> kElementos) // joao victor
+        private Artista definirClasse(List<CenaDistancia> kElementos)
         {
             // classifica uma cena em função dos seus k elementos mais próximos....
             // pegar a classe mais comum..
@@ -85,13 +80,12 @@ namespace Classificador_Knn
             return artistasExistentes.Where(item => item.nome == dic.ElementAt(0).Key).SingleOrDefault();
         }
 
-        private void armazenarResultado(Artista classeObtida, Artista classeReal) // joao victor
+        private void armazenarResultado(Artista classeObtida, Artista classeReal)
         {
             // Comparar as classes recebidas e armazenar na matriz de confusão...
             int index1 = artistasExistentes.IndexOf(artistasExistentes.Where(item => item.nome == classeObtida.nome).SingleOrDefault());
             int index2 = artistasExistentes.IndexOf(artistasExistentes.Where(item => item.nome == classeReal.nome).SingleOrDefault());
             matrizConfusao[index1, index2] += 1;
-            //Console.WriteLine(matrizConfusao[index1, index2]);
         }
 
         public void imprimirMatrizConfusao() // imprimir matriz de confusão... em porcentagem.... resultados corretos / total de dados avaliados...
@@ -120,27 +114,35 @@ namespace Classificador_Knn
                     j = 0;                    
                 }
             }
-            var elementos = ";"; //saltar primeira lacuna do excell
+            TimeSpan ti = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, DateTime.Now.Millisecond);
+            string linha = ";";
             foreach (var artista in this.artistasExistentes)
             {
-                elementos += artista.nome + ";";
+                linha += artista.nome + ";";
             }
-            elementos += "\n";
+            this.escreverArquivo("novo.csv", linha, false);
                        
             for (i = 0; i < tamanhoMatriz; i++)
             {
-                Console.WriteLine(i);
-                elementos += this.artistasExistentes[i].nome + ";";
+               
+                linha = this.artistasExistentes[i].nome + ";";
                 for (j = 0; j < tamanhoMatriz; j++)
                 {
-                    elementos += this.matrizConfusao[i, j] + ";";
+                    linha += this.matrizConfusao[i, j] + ";";
                 }
-                elementos += "\n";
+                this.escreverArquivo("novo.csv", linha, true);
             }
-            File.WriteAllText("matrizConfusao.csv", elementos);
+            Console.ReadKey();
         }
 
-        private void lerArquivos(string path) // thiago
+        private void escreverArquivo(string path, string linha, bool concatenarAoArquivoExistente)
+        {
+            StreamWriter r = new StreamWriter(@path, concatenarAoArquivoExistente);
+            r.WriteLine(linha);
+            r.Dispose();
+        }
+
+        private void lerArquivos(string path)
         {
             this.lerMusicas("classes.csv");
             this.lerCenas(path);
