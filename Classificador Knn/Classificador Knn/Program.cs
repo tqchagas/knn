@@ -10,18 +10,29 @@ namespace Classificador_Knn
     {
         static void Main(string[] args)
         {
-            ClassificadorDeBaseKnn c = new ClassificadorDeBaseKnn("teste.csv");
-            c.classificarBase(3);
-            //kelementosarmazenados a = new kelementosarmazenados(10);
+            Console.WriteLine("Início da classificação.");
+            int k = 3;
+
+            //string arquivoCenas = "teste.csv";
+            string arquivoCenas = "base1.txt";
+            string arquivoMusicas = "classes.csv";
+            string arquivoMatrizConfusao = "novo.csv";
+
+            ClassificadorDeBaseKnn classificador = new ClassificadorDeBaseKnn(arquivoCenas, arquivoMusicas, arquivoMatrizConfusao);
+            classificador.classificarBase(k);
+
+            Console.WriteLine("Fim da classificação! Matriz Confusão gerada com sucesso no arquivo!");
+
+            //KElementosArmazenados a = new KElementosArmazenados(3);
 
             //for (int i = 0; i < 10; i++)
             //{
-            //    a.inserir(new cenadistancia(i, 10 + i));
+            //    a.inserir(new CenaDistancia(i + 1, i + 2));
             //}
 
-            //a.inserir(new cenadistancia(20, 4));
-            //a.inserir(new cenadistancia(23, 1));
-            //a.inserir(new cenadistancia(50, 90));
+            //a.inserir(new CenaDistancia(20, 4));
+            //a.inserir(new CenaDistancia(23, 1));
+            //a.inserir(new CenaDistancia(50, 90));
 
 
             Console.ReadKey();

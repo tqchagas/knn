@@ -10,43 +10,56 @@ namespace Classificador_Knn
     {
         private int k;
         private int qtdElementosExistentes;
-        private List<CenaDistancia> lista;
+        private CenaDistancia[] vetor;
 
         public KElementosArmazenados(int capacidade)
         {
             this.k = capacidade;
             qtdElementosExistentes = 0;
 
-            lista = new List<CenaDistancia>();
+            vetor = new CenaDistancia[k + 1];
         }
 
         public void inserir(CenaDistancia elemento)
         {
             if (qtdElementosExistentes < k)
             {
-                lista.Add(elemento);
+                vetor[qtdElementosExistentes] = elemento;
                 qtdElementosExistentes++;
-                lista.OrderBy(item => item.distancia);
+
+                if (qtdElementosExistentes == k) vetor.OrderBy(item => item.distancia);// ordenação básica de k elementos.
             }
 
-            else if (qtdElementosExistentes == k) // lotado..
+            else
             {
-                if (elemento.distancia < lista[k - 1].distancia) // se for menor do que os presentes na lista...
+                vetor[qtdElementosExistentes] = elemento; // elemento colocado na área de swap/lixo...
+
+                if (vetor[qtdElementosExistentes].distancia < vetor[qtdElementosExistentes - 1].distancia) // se o novo elemento for menor do que o último no vetor...
                 {
-                    lista.Add(elemento);
-                    lista = lista.OrderBy(item => item.distancia).ToList().Take(k).ToList();
+                    int i = k;
+                    while (i > 0 && vetor[i].distancia < vetor[i - 1].distancia)
+                    {
+                        CenaDistancia temp = vetor[i];
+                        vetor[i] = vetor[i - 1];
+                        vetor[i - 1] = temp;
+                        
+                        i--;
+                    }
+
+                    vetor[i] = elemento;
                 }
             }
         }
 
         public List<CenaDistancia> retornarKElementos()
         {
-            return lista;
+            return vetor.Take(k).ToList();
         }
 
         public void esvaziarEstrutura()
         {
-            lista.Clear();
+            qtdElementosExistentes = 0;
+            vetor = new CenaDistancia[k + 1];
         }
     }
 }

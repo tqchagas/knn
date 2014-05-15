@@ -10,25 +10,29 @@ namespace Classificador_Knn
 {
     class ClassificadorDeBaseKnn
     {
+        private string pathArquivoMatrizConfusao;
+
         private List<Musica> musicas;
         private List<Cena> cenas;
         private List<Artista> artistasExistentes;
         private int[,] matrizConfusao;
 
-        public ClassificadorDeBaseKnn(string path)
+        public ClassificadorDeBaseKnn(string pathCenas, string pathMusicas, string pathArquivoMatriz)
         {
-            this.lerArquivos(path);
-            matrizConfusao = new int[artistasExistentes.Count(), artistasExistentes.Count()]; // definir em funcao da classe avaliada....
+            this.pathArquivoMatrizConfusao = pathArquivoMatriz;
+            this.lerArquivos(pathCenas, pathMusicas);
+            
+            this.matrizConfusao = new int[artistasExistentes.Count(), artistasExistentes.Count()]; // definir em funcao da classe avaliada....
         }
 
         public void classificarBase(int k)
         {
             // classifica a base em função de k...
             TimeSpan t = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+
+            KElementosArmazenados kElementosProximos = new KElementosArmazenados(k);
             for (int i = 0; i < cenas.Count(); i++)
             {
-                KElementosArmazenados kElementosProximos = new KElementosArmazenados(k);
-
                 for (int j = 0; j < cenas.Count(); j++)
                 {
                     double distancia = calcularDistancia(cenas[i], cenas[j]);
@@ -41,7 +45,8 @@ namespace Classificador_Knn
 
                 kElementosProximos.esvaziarEstrutura();
             }
-            imprimirMatrizConfusao();
+
+            imprimirMatrizConfusao(pathArquivoMatrizConfusao);
         }
 
         private double calcularDistancia(Cena cena1, Cena cena2)
@@ -88,8 +93,9 @@ namespace Classificador_Knn
             matrizConfusao[index1, index2] += 1;
         }
 
-        public void imprimirMatrizConfusao() // imprimir matriz de confusão... em porcentagem.... resultados corretos / total de dados avaliados...
+        public void imprimirMatrizConfusao(string pathArquivo)
         {
+            // imprimir matriz de confusão... em porcentagem.... resultados corretos / total de dados avaliados...
             int tamanhoMatriz = this.artistasExistentes.Count();
             int[] somaLinhaMatriz = new int[tamanhoMatriz];
             int i = 0;
@@ -103,15 +109,15 @@ namespace Classificador_Knn
                     j = 0;
                     do
                     {
-                        if (this.matrizConfusao[i,j] != 0)
+                        if (this.matrizConfusao[i, j] != 0)
                         {
-                            this.matrizConfusao[i, j] = (this.matrizConfusao[i, j] / somaLinhaMatriz[i]) * 100;    
+                            this.matrizConfusao[i, j] = (this.matrizConfusao[i, j] / somaLinhaMatriz[i]) * 100;
                         }
-                        else{}
+                        else { }
                         j++;
                     } while (j < tamanhoMatriz);
                     i++;
-                    j = 0;                    
+                    j = 0;
                 }
             }
             TimeSpan ti = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, DateTime.Now.Millisecond);
@@ -120,19 +126,18 @@ namespace Classificador_Knn
             {
                 linha += artista.nome + ";";
             }
-            this.escreverArquivo("novo.csv", linha, false);
-                       
+            this.escreverArquivo(pathArquivo, linha, false);
+
             for (i = 0; i < tamanhoMatriz; i++)
             {
-               
+
                 linha = this.artistasExistentes[i].nome + ";";
                 for (j = 0; j < tamanhoMatriz; j++)
                 {
                     linha += this.matrizConfusao[i, j] + ";";
                 }
-                this.escreverArquivo("novo.csv", linha, true);
+                this.escreverArquivo(pathArquivo, linha, true);
             }
-            Console.ReadKey();
         }
 
         private void escreverArquivo(string path, string linha, bool concatenarAoArquivoExistente)
@@ -142,10 +147,10 @@ namespace Classificador_Knn
             r.Dispose();
         }
 
-        private void lerArquivos(string path)
+        private void lerArquivos(string pathCenas, string pathMusicas)
         {
-            this.lerMusicas("classes.csv");
-            this.lerCenas(path);
+            this.lerMusicas(pathMusicas);
+            this.lerCenas(pathCenas);
         }
 
         private void lerCenas(string path)
