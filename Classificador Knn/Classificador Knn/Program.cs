@@ -14,7 +14,7 @@ namespace Classificador_Knn
             int k = 601;
 
             //string arquivoCenas = "teste.csv";
-            string arquivoCenas = "base1.txt";
+            string arquivoCenas = "base1b.csv";
             string arquivoMusicas = "classes.csv";
             string arquivoMatrizConfusao = "novo.csv";
 

@@ -51,13 +51,14 @@ namespace Classificador_Knn
 
         private double calcularDistancia(Cena cena1, Cena cena2)
         {
-            int menorQuantidadeDescritores = cena1.descritores.Count() > cena2.descritores.Count ?
-                cena2.descritores.Count() : cena1.descritores.Count();
+            //int menorQuantidadeDescritores = cena1.descritores.Count() > cena2.descritores.Count ?
+                //cena2.descritores.Count() : cena1.descritores.Count();
 
             double acumulador = 0;
-            for (int i = 0; i < menorQuantidadeDescritores; i++)
+            for (int i = 0; i < cena1.descritores.Count(); i++)
             {
-                acumulador += Math.Pow(cena1.descritores[i] - cena2.descritores[i], 2);
+                double resultado = cena1.descritores[i] - cena2.descritores[i];
+                acumulador += resultado * resultado;
 
             }
             return (Math.Sqrt(acumulador));
