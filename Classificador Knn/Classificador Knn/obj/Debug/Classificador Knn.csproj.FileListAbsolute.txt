@@ -23,3 +23,7 @@ C:\Users\jvitorsf\Documents\GitHub\knn\Classificador Knn\Classificador Knn\obj\D
 C:\Users\jvitorsf\Documents\GitHub\knn\Classificador Knn\Classificador Knn\bin\Debug\Classificador Knn.exe
 C:\Users\jvitorsf\Documents\GitHub\knn\Classificador Knn\Classificador Knn\bin\Debug\Classificador Knn.pdb
 C:\Users\jvitorsf\Documents\GitHub\knn\Classificador Knn\Classificador Knn\obj\Debug\Classificador Knn.csprojResolveAssemblyReference.cache
+C:\Users\Victor Lucio\Documents\GitHub\knn\Classificador Knn\Classificador Knn\bin\Debug\Classificador Knn.exe.config
+C:\Users\Victor Lucio\Documents\GitHub\knn\Classificador Knn\Classificador Knn\obj\Debug\Classificador Knn.exe
+C:\Users\Victor Lucio\Documents\GitHub\knn\Classificador Knn\Classificador Knn\obj\Debug\Classificador Knn.pdb
+C:\Users\Victor Lucio\Documents\GitHub\knn\Classificador Knn\Classificador Knn\obj\Debug\Classificador Knn.csprojResolveAssemblyReference.cache

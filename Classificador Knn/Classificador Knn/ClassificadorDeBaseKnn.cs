@@ -82,7 +82,8 @@ namespace Classificador_Knn
 
             dic.OrderByDescending(a => a.Value); // classificação mais comum na 1ª posição.
 
-            return artistasExistentes.Where(item => item.nome == dic.ElementAt(0).Key).SingleOrDefault();
+            return artistasExistentes.Where(item => item.nome == dic.OrderByDescending(i => i.Value).ElementAt(0).Key).SingleOrDefault();
+            //return artistasExistentes.Where(item => item.nome == dic.ElementAt(0).Key).SingleOrDefault();
         }
 
         private void armazenarResultado(Artista classeObtida, Artista classeReal)
@@ -100,24 +101,18 @@ namespace Classificador_Knn
             int[] somaLinhaMatriz = new int[tamanhoMatriz];
             int i = 0;
             int j = 0;
-            for (j = 0; i < tamanhoMatriz; )
+            for (; i < tamanhoMatriz; i++)
             {
-                somaLinhaMatriz[i] += this.matrizConfusao[i, j];
-                j++;
-                if (j == tamanhoMatriz)
+                for (j = 0; j < tamanhoMatriz; j++)
                 {
-                    j = 0;
-                    do
+                    somaLinhaMatriz[i] += this.matrizConfusao[i, j];   
+                }
+                for (j = 0; j < tamanhoMatriz; j++)
+                {
+                    if (this.matrizConfusao[i,j] != 0)
                     {
-                        if (this.matrizConfusao[i, j] != 0)
-                        {
-                            this.matrizConfusao[i, j] = (this.matrizConfusao[i, j] / somaLinhaMatriz[i]) * 100;
-                        }
-                        else { }
-                        j++;
-                    } while (j < tamanhoMatriz);
-                    i++;
-                    j = 0;
+                        this.matrizConfusao[i, j] = (this.matrizConfusao[i, j] / somaLinhaMatriz[i]) * 100;
+                    }
                 }
             }
             TimeSpan ti = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second, DateTime.Now.Millisecond);

@@ -11,7 +11,7 @@ namespace Classificador_Knn
         static void Main(string[] args)
         {
             Console.WriteLine("Início da classificação.");
-            int k = 3;
+            int k = 601;
 
             //string arquivoCenas = "teste.csv";
             string arquivoCenas = "base1.txt";
