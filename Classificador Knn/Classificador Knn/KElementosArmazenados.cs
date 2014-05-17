@@ -27,7 +27,12 @@ namespace Classificador_Knn
                 vetor[qtdElementosExistentes] = elemento;
                 qtdElementosExistentes++;
 
-                if (qtdElementosExistentes == k) vetor.OrderBy(item => item.distancia);// ordenação básica de k elementos.
+                if (qtdElementosExistentes == k)
+                {
+                    double maxDistancia = vetor.Max(a => a != null ? a.distancia : 0); 
+                    // recupero a distancia maxima apenas para ser possível ordenar um vetor sem ter todas as suas posições preenchidas abaixo:
+                    vetor = vetor.OrderBy(item => item != null ? item.distancia : maxDistancia + 2).ToArray();// ordenação básica de k elementos.
+                }
             }
 
             else
@@ -37,16 +42,16 @@ namespace Classificador_Knn
                 if (vetor[qtdElementosExistentes].distancia < vetor[qtdElementosExistentes - 1].distancia) // se o novo elemento for menor do que o último no vetor...
                 {
                     int i = k;
-                    while (i > 0 && vetor[i].distancia < vetor[i - 1].distancia)
+                    while (i > 0 && vetor[i].distancia < vetor[i - 1].distancia) // itera sobre o vetor até encontrar a posição correta para inserção.
                     {
                         CenaDistancia temp = vetor[i];
                         vetor[i] = vetor[i - 1];
                         vetor[i - 1] = temp;
-                        
+
                         i--;
                     }
 
-                    vetor[i] = elemento;
+                    vetor[i] = elemento; // coloca o novo elemento na posição correta entre os K elementos.
                 }
             }
         }

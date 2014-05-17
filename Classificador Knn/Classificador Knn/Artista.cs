@@ -14,7 +14,7 @@ namespace Classificador_Knn
         {
             if (nomeArtista == null)
             {
-                Console.ReadKey();
+                this.nome = "ARTISTA SEM NOME";
             }
             else
             {
