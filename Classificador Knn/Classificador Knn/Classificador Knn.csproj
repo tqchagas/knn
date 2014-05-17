@@ -47,7 +47,6 @@
     <Compile Include="ClassificadorDeBaseKnn.cs" />
     <Compile Include="KElementosArmazenados.cs" />
     <Compile Include="Musica.cs" />
-    <Compile Include="Ordenacao.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
