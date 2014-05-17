@@ -15,14 +15,14 @@ namespace Classificador_Knn
         private List<Musica> musicas;
         private List<Cena> cenas;
         private List<Artista> artistasExistentes;
-        private int[,] matrizConfusao;
+        private float[,] matrizConfusao;
 
         public ClassificadorDeBaseKnn(string pathCenas, string pathMusicas, string pathArquivoMatriz)
         {
             this.pathArquivoMatrizConfusao = pathArquivoMatriz;
             this.lerArquivos(pathCenas, pathMusicas);
             int numeroArtistasExistentes = this.artistasExistentes.Count();
-            this.matrizConfusao = new int[numeroArtistasExistentes, numeroArtistasExistentes]; // definir em funcao da classe avaliada....
+            this.matrizConfusao = new float[numeroArtistasExistentes, numeroArtistasExistentes]; // definir em funcao da classe avaliada....
         }
 
         public void classificarBase(int k)
@@ -119,10 +119,13 @@ namespace Classificador_Knn
         {
             // imprimir matriz de confusão... em porcentagem.... resultados corretos / total de dados avaliados...
             int tamanhoMatriz = this.artistasExistentes.Count();
-            int[] somaLinhaMatriz = new int[tamanhoMatriz];
+            float[] somaLinhaMatriz = new float[tamanhoMatriz];
+            float qtdAcertos = 0; // qtd Acertos do Classificador.
+            string linha = ";";
+
             int i = 0;
             int j = 0;
-            string linha = ";";
+
             foreach (var artista in this.artistasExistentes)
             {
                 linha += artista.nome + ";";
@@ -130,13 +133,14 @@ namespace Classificador_Knn
             this.escreverArquivo(pathArquivo, linha, false);
             for (; i < tamanhoMatriz; i++)
             {
-                linha = this.artistasExistentes[i].nome;
+                linha = this.artistasExistentes[i].nome + ";";
                 for (j = 0; j < tamanhoMatriz; j++)
                 {
                     somaLinhaMatriz[i] += this.matrizConfusao[i, j];
                 }
                 for (j = 0; j < tamanhoMatriz; j++)
                 {
+                    if (i == j) qtdAcertos += this.matrizConfusao[i, j]; // contabilizando os acertos do classificador;
                     if (this.matrizConfusao[i, j] != 0)
                     {
                         this.matrizConfusao[i, j] = (this.matrizConfusao[i, j] / somaLinhaMatriz[i]) * 100;
@@ -145,6 +149,13 @@ namespace Classificador_Knn
                 }
                 this.escreverArquivo(pathArquivo, linha, true);
             }
+
+            float qtdTestes = somaLinhaMatriz.Sum(); // qtd de Testes (Classificações) executadas no classificador.
+            float acertos = (qtdAcertos / qtdTestes) * 100;
+            float erros = 100 - acertos;
+
+            linha = "\nDesempenho Geral;\n Acertos: ; " + acertos + "% ; \n Erros: ;" + erros + " % ;";
+            this.escreverArquivo(pathArquivo, linha, true);
         }
 
         private void escreverArquivo(string path, string linha, bool concatenarAoArquivoExistente)
