@@ -181,7 +181,6 @@ namespace Classificador_Knn
             {
                 var linhas = File.ReadAllLines(@path)
                     .Select(csv => csv.Split(';'))
-                    .Skip(1)
                     .ToList();
                 this.cenas = new List<Cena>();
 
